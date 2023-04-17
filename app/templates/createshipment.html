@@ -1,0 +1,196 @@
+<!-- <html lang="en"> -->
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Shipment</title>
+
+    <!-- <link rel="stylesheet" href="/CSS/shipment2.css"> -->
+
+    <link rel="stylesheet" href="../static/css/createshipment.css">
+
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="top">
+            <div class="logo">
+                <i class="fas fa-sailboat" style="font-size: 24px;"></i>
+                <span> SCMXPert Lite</span>
+            </div>
+            <i class="fas fa-bars" id="btn"></i>
+        </div>
+
+        <ul>
+            {% for link in links %}
+            <li>
+                <a href="{{ link.url }}">
+                    <i class="{{ link.icon }}"></i>
+                    <span class="nav-item">{{ link.name }}</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <h1>Create New Shipment</h1>
+        </div>
+
+        <div class="body">
+            <div class="message">
+                <!-- <h1>aaaa</h1> -->
+                <!-- {% for message in message %} -->
+                    {{message}}
+                <!-- {% endfor %} -->
+            </div>
+
+            <div class="contain">
+                <div class="title">Fill all the details</div>
+                <form action="#" method="post" name="shipmentForm">
+                    <div class="form-first">
+                        <div class="fields">
+
+                            <div class="input-field">
+                                <label>Shipment Number<span>*</span></label>
+                                <input type="number" placeholder="Enter Shipment Number" name="Shipment_Number" id="Shipment_Number">
+                                <div class="error" id="shipmentNumberErr">
+                                </div>
+                            </div>                        
+    
+                            <div class="input-field">
+                                <label>Container Number<span>*</span></label>
+                                <input type="number" placeholder="Enter Container Number" name="Container_Number" id="Container_Number">
+                                <div class="error" id="containerNumberErr">
+                                </div>
+                            </div>
+    
+                            <div class="input-field">
+                                <label>Route Details<span>*</span></label>
+                                <select id="Route_Details" name="Route_Details">
+                                    <option value="select">Select Route</option>
+                                    <option value="Mumbai to Hyderabad">Mumbai to Hyderabad</option>
+                                    <option value="Mumbai to Chennai">Mumbai to Chennai</option>
+                                    <option value="Bangalore to Hyderabad">Bangalore to Hyderabad</option>
+                                    <option value="Bangalore to Chennai">Bangalore to Chennai</option>
+                                    <option value="Hyderabad to Chennai">Hyderabad to Chennai</option>
+                                    <option value="Hyderabad to Bangalore">Hyderabad to Bangalore</option>
+                                </select>
+                                <div class="error" id="routeDetailsErr">
+                                </div>
+                            </div>
+    
+                            <div class="input-field">
+                                <label>Goods Type<span>*</span></label>
+                                <select id="Goods_Type" name="Goods_Type">
+                                    <option value="select">Select Goods</option>
+                                    <option value="Electronics">Electronics</option>
+                                    <option value="Medical">Medical</option>
+                                    <option value="Antiques">Antiques</option>
+                                </select>
+                                <div class="error" id="goodsTypeErr">
+                                </div>
+                            </div>
+    
+                            <div class="input-field">
+                                <label>Device<span>*</span></label>
+                                <select id="Device" name="Device">
+                                    <option value="select">Select Device</option>
+                                    <option value="517501">517501</option>
+                                    <option value="530068">530068</option>
+                                    <option value="560003">560003</option>
+                                    <option value="515253">515253</option>
+                                </select>
+                                <div class="error" id="deviceErr">
+                                </div>
+                            </div>
+    
+                            <div class="input-field">
+                                <label>Expected Delivery Date<span>*</span></label>
+                                <input type="date" name="Expected_Delivery_Date" id="Expected_Delivery_Date">
+                                <div class="error" id="deliveryDateErr">
+                                </div>
+                            </div>
+    
+                            <div class="input-field">
+                                <label>PO Number<span>*</span></label>
+                                <input type="number" placeholder="Enter PO Number" name="PO_Number" id="PO_Number">
+                                <div class="error" id="poNumberErr">
+                                </div>
+                            </div>
+                            
+                            <div class="input-field">
+                                <label>Delivery Number<span>*</span></label>
+                                <input type="number" placeholder="Enter Delivery Number" name="Delivery_Number" id="Delivery_Number">
+                                <div class="error" id="deliveryNumberErr">
+                                </div>
+                            </div>
+                            
+    
+                            <div class="input-field">
+                                <label>NDC Number<span>*</span></label>
+                                <input type="number" placeholder="Enter NDC Number" name="NDC_Number" id="NDC_Number">
+                                <div class="error" id="ndcNumberErr">
+                                </div>
+                            </div>
+                            
+                            <div class="input-field">
+                                <label>Batch Id<span>*</span></label>
+                                <input type="number" placeholder="Enter Batch Id" name="Batch_Id" id="Batch_Id">
+                                <div class="error" id="batchIdErr">
+                                </div>
+                            </div>
+                            
+                            <div class="input-field">
+                                <label>Serial Number of Goods<span>*</span></label>
+                                <input type="number" placeholder="Enter Serial Number of Goods" name="Serial_Number_Of_Goods" id="Serial_Number_Of_Goods">
+                                <div class="error" id="numberOfGoodsErr">
+                                </div>
+                            </div>
+                            
+                            <div class="input-field">
+                                <label>Shipment Description<span>*</span></label>
+                                <textarea name="Description" id="Description" style="padding-top: 10px;" cols="30" rows="5" placeholder="Shipment Description"></textarea>
+                                <div class="error" id="descriptionErr">
+                                </div>
+                            </div>
+                        
+
+                        <!-- <div class="backBtn">
+                            <button type="reset"><p class="btnText">CLEAR DETAILS</p></button>
+                        </div>
+                        
+                        <div class="submit">
+                            <button type="submit"><p class="btnText">CREATE SHIPMENT</p></button>                            
+                        </div> -->
+
+                        <div class="formButtonsContainer">
+                            <button class="clearDetailsButton" type="reset" style="background-color: blue;">Clear Details</button>    
+                            <button class="createShipmentButton" type="submit" style="background-color: red;" onclick="javascript:return validateShipment()">Create Shipment</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        </div>
+    </div>
+
+    <script src="/static/js/newshipment.js"></script>
+
+</body>
+
+<script>
+    let btn = document.querySelector('#btn');
+    let sidebar = document.querySelector('.sidebar');
+
+    btn.onclick = function() {
+        sidebar.classList.toggle('active');
+    };
+</script>
+
+</html>

@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Shipment</title>
+
+    <!-- Links for icons -->
+
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <!-- <link rel="stylesheet" href="/CSS/myshipment.css"> -->
+
+    <link rel="stylesheet" href="/static/css/myshipment.css">
+
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="top">
+            <div class="logo">
+                <i class="fas fa-sailboat" style="font-size: 24px;"></i>
+                <span>SCMXPert Lite</span>
+            </div>
+            <i class="fas fa-bars" id="btn"></i>
+        </div>
+
+        <ul>
+            {% for link in links %}
+            <li>
+                <a href="{{ link.url }}">
+                    <i class="{{ link.icon }}"></i>
+                    <span class="nav-item">{{ link.name }}</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <h1>My Shipment</h1>
+        </div>
+
+        <div class="body">
+            
+            <div class="content">
+                <div class="title">Shipment Details</div>
+                <div class="table-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th >Shipment Number</th>
+                                <th>Container Number</th>
+                                <th>Route Details</th>
+                                <th>Goods Type</th>
+                                <th>Device</th>
+                                <th>Expected Delivery Date</th>
+                                <th>PO Number</th>
+                                <th>Delivery Number</th>
+                                <th>NDC Number</th>
+                                <th>Batch Id</th>
+                                <th>Serial Number of Goods</th>
+                                <th>Shipment Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- {% if user %} -->
+                            {% for item in data %}
+                            <tr>
+                                <td data-label="Shipment Number">{{ item.Shipment_Number }}</td>
+                                <td data-label="Container Number">{{ item.Container_Number }}</td>
+                                <td data-label="Route Details">{{ item.Route_Details }}</td>
+                                <td data-label="Goods Type">{{ item.Goods_Type }}</td>
+                                <td data-label="Device">{{ item.Device }}</td>
+                                <td data-label="Expected Delivery Date">{{ item.Expected_Delivery_Date }}</td>
+                                <td data-label="PO Number">{{ item.PO_Number }}</td>
+                                <td data-label="Delivery Number">{{ item.Delivery_Number }}</td>
+                                <td data-label="NDC Number">{{ item.NDC_Number }}</td>
+                                <td data-label="Batch Id">{{ item.Batch_Id }}</td>
+                                <td data-label="Serial Number of Goods">{{ item.Serial_Number_Of_Goods }}</td>
+                                <td data-label="Shipment Description">{{ item.Description }}</td>
+                            </tr>
+                            {% endfor %}
+                            <!-- {% endif %} -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>            
+        </div>
+
+    </div>
+    
+</body>
+
+<script>
+    let btn = document.querySelector('#btn');
+    let sidebar = document.querySelector('.sidebar');
+
+    btn.onclick = function() {
+        sidebar.classList.toggle('active');
+    };
+</script>
+
+</html>

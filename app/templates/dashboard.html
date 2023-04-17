@@ -1,0 +1,77 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCMXPertLite Home</title>
+
+    <!-- <link rel="stylesheet" href="/CSS/dashboard.css"> -->
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="top">
+            <div class="logo">
+                <i class="fas fa-sailboat" style="font-size: 24px;"></i>
+                <span> SCMXPert Lite</span>
+            </div>
+            <i class="fas fa-bars" id="btn"></i>
+        </div>
+
+        <ul>
+            {% for link in links %}
+            <li>
+                <a href="{{ link.url }}">
+                    <i class="{{ link.icon }}"></i>
+                    <span class="nav-item">{{ link.name }}</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+    
+    <div class="main-content">
+        <div class="container">
+            <h1>Hi {{ user.Full_Name}}, Welcome to SCMXPert Lite</h1>
+        </div>        
+        <div class="body">
+            <div class="content">
+                <div class="row" >
+                    {% for link in d_links %}
+                    <div class="column-left" >
+                        <h2>{{ link.text }}</h2>
+                        <div class="button">
+                            <button><a href="{{link.url}}"><p class="btnText">{{ link.name }}</p></a></button>
+                        </div>
+                    </div>
+                    <!-- <div class="column-right" >
+                        <h2>{{ link.text }}</h2>
+                        <div class="button">
+                            <button><a href="{{link.url}}"><p class="btnText">{{ link.name }}</p></a></button>
+                        </div>
+                    </div> -->
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+
+    </div>  
+    
+</body>
+
+<script>
+    let btn = document.querySelector('#btn');
+    let sidebar = document.querySelector('.sidebar');
+
+    btn.onclick = function() {
+        sidebar.classList.toggle('active');
+    };
+</script>
+
+</html>

@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account</title>
+
+    <!-- <link rel="stylesheet" href="/CSS/myaccount.css"> -->
+
+    <link rel="stylesheet" href="/static/css/myaccount.css">
+
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="top">
+            <div class="logo">
+                <i class="fas fa-sailboat" style="font-size: 24px;"></i>
+                <span> SCMXPert Lite</span>
+            </div>
+            <i class="fas fa-bars" id="btn"></i>
+        </div>
+        
+        <ul>
+            {% for link in links %}
+            <li>
+                <a href="{{ link.url }}">
+                    <i class="{{ link.icon }}"></i>
+                    <span class="nav-item">{{ link.name }}</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <h1>My Account</h1>
+        </div>
+
+        <div class="body">
+            <div class="content">
+                <div class="banner">
+                    <img src="../static/images/user.png" alt="" class="profile-img">
+                </div> 
+
+                <div class="text-data">
+                    <span class="name"><i class="fas fa-user"></i> {{ user.Full_Name }}</span>
+                    <!-- <span class="username">{{ user.Full_Name }}</span> -->
+                    <span class="email"><i class="fas fa-envelope"></i> {{ user.Email }}</span>
+                    <!-- <span class="user-email">{{ user.Email }}</span> -->
+                </div>
+
+                <div class="media-buttons">
+                    <a href="https://www.facebook.com/" target="_blank" class="link" style="background-color: #4267b2;">
+                        <i class='bx bxl-facebook'></i>
+                    </a>
+                    <a href="https://twitter.com/" target="_blank" class="link" style="background-color: #1da1f2;">
+                        <i class='bx bxl-twitter'></i>
+                    </a>
+                    <a href="https://www.instagram.com/" target="_blank" class="link" style="background-color: #e1306c;">
+                        <i class='bx bxl-instagram'></i>
+                    </a>
+                    <a href="https://www.youtube.com/" target="_blank" class="link" style="background-color: #ff0000;">
+                        <i class='bx bxl-youtube'></i>
+                    </a>
+                </div>
+            </div>            
+        </div>
+
+    </div>
+
+</body>
+
+<script>
+    let btn = document.querySelector('#btn');
+    let sidebar = document.querySelector('.sidebar');
+
+    btn.onclick = function() {
+        sidebar.classList.toggle('active');
+    };
+</script>
+
+</html>
