@@ -158,9 +158,10 @@ body {
 }
 .contain{
     position: relative;
-    max-width: 1000px;
+    max-width: 800px;
     /* height: calc(100% - 60px); */
-    height: fit-content;
+    /* height: fit-content; */
+    max-height: 550px;
     width: 100%;
     border-radius: 6px;
     padding: 15px;
@@ -184,3 +185,38 @@ body {
     width: 60px;
     background: #7d2ae8;
 } */
+
+.contain .table-content {
+    width: 100%;
+    max-height: 450px;
+    margin-top: 15px;
+    /* padding-left: 25px; */
+    overflow-y: scroll;
+    overflow-x: scroll;
+}
+.contain .table-content::-webkit-scrollbar{
+    display: none;
+}
+
+.contain table{
+    position: relative;
+    /* height: calc(100% - 60px); */
+    max-height: 550px;
+    width: 100%;
+    border-radius: 10px;
+    /* margin-top: 10px; */
+    padding: 30px;
+    background-color: #fff;
+    border-collapse: collapse;
+}
+
+table th, td{
+    border: 1px solid #000;
+    padding: 5px 5px;
+    text-align: center;
+}
+
+table th {
+    background-color: darkblue;
+    color: #fff;
+}

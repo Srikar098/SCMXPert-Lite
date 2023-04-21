@@ -17,7 +17,7 @@
         <div class="top">
             <div class="logo">
                 <i class="fas fa-sailboat" style="font-size: 24px;"></i>
-                <span> SCMXPert Lite</span>
+                <span> SCMXPertLite</span>
             </div>
             <i class="fas fa-bars" id="btn"></i>
         </div>
@@ -41,22 +41,54 @@
         </div>        
         <div class="body">
             <div class="content">
-                <div class="row" >
-                    {% for link in d_links %}
-                    <div class="column-left" >
-                        <h2>{{ link.text }}</h2>
-                        <div class="button">
-                            <button><a href="{{link.url}}"><p class="btnText">{{ link.name }}</p></a></button>
+                <div class="part1">
+                    <div class="context">
+                        <div class="title">What we provide here?</div>
+                        <div class="text">
+                            <p>Here at our organization, we provide a comprehensive supply chain monitoring service that helps businesses streamline their operations and improve efficiency. Our experts use advanced technologies and analytical tools to monitor every aspect of the supply chain, from procurement to delivery. We track inventory levels, transportation times, and other critical metrics to ensure that products are delivered on time and at the lowest cost possible. </p>
+                        </div>
+                        <div class="redirect">
+                            <div>Learn more</div>
+                            <a href="/dashboard"><img src="/static/images/greater.png" alt=""></a>
                         </div>
                     </div>
-                    <!-- <div class="column-right" >
-                        <h2>{{ link.text }}</h2>
-                        <div class="button">
-                            <button><a href="{{link.url}}"><p class="btnText">{{ link.name }}</p></a></button>
-                        </div>
-                    </div> -->
-                    {% endfor %}
+                    <div class="images">
+                        <img src="/static/images/img1.jpg">
+                    </div>                 
+                </div>
 
+                <div class="part2">
+                    <div class="images">
+                        <img src="/static/images/img2.jpg" alt="Create Shipment">
+                    </div>
+                    <div class="context">
+                        <div class="title">Our Create Shipment Service</div>
+                        <div class="text">
+                            <p>We offer a wide range of shipping options to suit your needs, including expedited delivery, same-day delivery, and economy shipping, ensuring that you have the flexibility to choose the shipping option that best meets your requirements. Our expedited delivery service is perfect for urgent shipments that need to be delivered quickly, while our same-day delivery service is ideal for time-sensitive shipments that need to be delivered on the same day.</p>    
+                        </div>
+                        <div class="redirect">
+                            <div>Check It Out</div>
+                            <a href="/createShipment"><img src="/static/images/greater.png"></a>
+                        </div>
+                    </div> 
+                </div>
+
+                <div class="part3">
+                    <div class="context">
+                        <div class="title">Our My Shipment Service</div>
+                        <div class="text">
+                            <p>With our My Shipments feature, you can manage your logistics operations more effectively and make informed decisions to optimize your supply chain. Start tracking your shipments today and experience the convenience and reliability of our SCM platform.</p>
+                        </div>
+                        <div class="redirect">
+                            <div>Check It Out</div>
+                            {% for link in d_links %}
+                            <a href="{{link.url}}"><img src="/static/images/greater.png"></a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="images">
+                        <img src="/static/images/img3.jpg" alt="My Shipment">
+                    </div> 
                 </div>
             </div>
         </div>

@@ -19,7 +19,7 @@
         <div class="top">
             <div class="logo">
                 <i class="fas fa-sailboat" style="font-size: 24px;"></i>
-                <span> SCMXPert Lite</span>
+                <span> SCMXPertLite</span>
             </div>
             <i class="fas fa-bars" id="btn"></i>
         </div>
@@ -44,6 +44,33 @@
         <div class="body">
             <div class="contain">
                 <div class="title">Device Data</div>
+                <div class="table-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Device ID</th>
+                                <th>Battery Level</th>
+                                <th>First Sensor Temperature</th>
+                                <th>Route From</th>
+                                <th>Route To</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- {% if user %} -->
+                            {% for item in data_streaming %}
+                            <tr>
+                                <td data-label="Device ID">{{ item.Device_ID }}</td>
+                                <td data-label="Battery Level">{{ item.Battery_Level }}</td>
+                                <td data-label="First Sensor Temperature">{{ item.First_Sensor_Temperature }}</td>
+                                <td data-label="Route From">{{ item.Route_From }}</td>
+                                <td data-label="Route To">{{ item.Route_To }}</td>
+                            </tr>
+                            {% endfor %}
+                            <!-- {% endif %} -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

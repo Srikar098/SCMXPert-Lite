@@ -29,6 +29,10 @@ USERS_COLLECTION = SETTING.USERS_COLLECTION
 async def login(request: Request):
     return TEMPLATES.TemplateResponse("login.html", {"request": request})
 
+# @app.get("/signup", response_class=HTMLResponse)
+# async def signup(request: Request):
+#     return TEMPLATES.TemplateResponse("login.html", {"request": request})
+
 
 #Post Request for User SignUp
 @app.post("/signup", response_class=HTMLResponse)
@@ -99,9 +103,6 @@ async def login_user(request: Request, form_data: OAuth2PasswordRequestForm = De
         return response
     except KeyError as exc:
         raise HTTPException(status_code=400, detail=f"Missing parameter: {exc}") from exc
-    except PyMongoError as exc:
-        raise HTTPException(
-            status_code=500, detail="Database error. Please try again later.") from exc
     except Exception as exc:
         raise HTTPException(status_code=500, detail="Internal Server Error") from exc
             
@@ -162,9 +163,9 @@ def navigation_links(current_user_role):
 #Function for displaying dashboard based on role
 def dashboard_links(current_user_role):
     if current_user_role == "Admin":
-        return [{"text":"Create a New Shipment","name": "CREATE SHIPMENT", "url":"/createShipment"}, {"text":"To see Device Data Stream ","name": "DEVICE DATA STREAM", "url":"/device_data_stream"}]
+        return [{"url":"/admin/myShipment"}]
     elif current_user_role == "User":
-        return [{"text":"Create a New Shipment","name": "CREATE SHIPMENT", "url":"/createShipment"}, {"text":"To see your Shipments","name": "MY SHIPMENT", "url":"/myShipment"}]
+        return [{"url":"/myShipment"}]
     else:
         return None
 
@@ -229,20 +230,24 @@ def forgot_password_auth(request: Request, Email: str = Form(...), Password: str
     data = USERS_COLLECTION.find_one({"Email":Email})
     if not data:
         return TEMPLATES.TemplateResponse("forgotpassword.html", {"request":request, "message":"Invalid Email Address"})
-    USERS_COLLECTION.update_one({"Email":Email},{"$set": {"Password": hashed_password}})
-    return TEMPLATES.TemplateResponse("forgotpassword.html", {"request":request, "message":"Successfully Reset Password"})
+    else:
+        old_password = data["Password"]
+        if verify_password(Password, old_password):
+            return TEMPLATES.TemplateResponse("forgotpassword.html",{"request": request, 'message': 'Old password cannot be a new password.'})
+        USERS_COLLECTION.update_one({"Email":Email},{"$set": {"Password": hashed_password}})
+        return TEMPLATES.TemplateResponse("forgotpassword.html", {"request":request, "message":"Successfully Reset Password"})
 
-@app.get("/device_data_stream", response_class=HTMLResponse)
-async def device_data(request: Request,current_user: User = Depends(get_current_user_from_cookie)):
-    if current_user is None:
-        return RedirectResponse(url="/login")
+# @app.get("/device_data_stream", response_class=HTMLResponse)
+# async def device_data(request: Request,current_user: User = Depends(get_current_user_from_cookie)):
+#     if current_user is None:
+#         return RedirectResponse(url="/login")
     
-    links = navigation_links(current_user["Role"])
-    d_links = dashboard_links(current_user["Role"])
-    context = {
-        "user": current_user,
-        "request": request,
-        "links": links,
-        "d_links": d_links
-    }
-    return TEMPLATES.TemplateResponse("devicedata.html", context)
+#     links = navigation_links(current_user["Role"])
+#     d_links = dashboard_links(current_user["Role"])
+#     context = {
+#         "user": current_user,
+#         "request": request,
+#         "links": links,
+#         "d_links": d_links
+#     }
+#     return TEMPLATES.TemplateResponse("devicedata.html", context)

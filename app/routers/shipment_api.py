@@ -1,4 +1,4 @@
-from fastapi.logger import logger
+
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi import  Form, Request, HTTPException, status, Depends, Response, APIRouter
 from fastapi.staticfiles import StaticFiles
@@ -82,6 +82,9 @@ async def my_shipments(request: Request, current_user: dict = Depends(get_curren
         }
         return TEMPLATES.TemplateResponse("myshipment.html", context)
 
+
+
+
 @app.get("/createShipment", response_class=HTMLResponse)
 def get_shipment_page(request: Request, current_user: User = Depends(get_current_user_from_cookie)):
     if current_user is None:
@@ -116,11 +119,6 @@ async def create_new_shipment(request: Request, Shipment_Number: int = Form(...)
             return TEMPLATES.TemplateResponse("createshipment.html", {"request": request, "links":links,"user":current_user, "message": " Your shipment has been created successfully"})
         return TEMPLATES.TemplateResponse("createshipment.html", {"request": request, "links":links,"user":current_user, "message": "*Shipment Number already exists"})
     except ValueError as exc:
-        raise HTTPException(
-            status_code=422, detail="Invalid input. Please check your input values.") from exc
-    except PyMongoError as exc:
-        raise HTTPException(
-            status_code=500, detail="Database error. Please try again later.") from exc
+        raise HTTPException(status_code=422, detail="Invalid input. Please check your input values.") from exc
     except Exception as exception:
-        raise HTTPException(
-            status_code=500, detail=f"Internal Server Error: {str(exception)}") from exception
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(exception)}") from exception

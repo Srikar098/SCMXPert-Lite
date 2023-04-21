@@ -18,7 +18,7 @@
         <div class="top">
             <div class="logo">
                 <i class="fas fa-sailboat" style="font-size: 24px;"></i>
-                <span> SCMXPert Lite</span>
+                <span> SCMXPertLite</span>
             </div>
             <i class="fas fa-bars" id="btn"></i>
         </div>
@@ -60,7 +60,7 @@
                             <label>Device ID<span>*</span></label>
                             <input type="number" placeholder="Enter device id" name="Device" id="Device">  
                         </div>
-
+                        
                         <div class="button input-field">
                             <input type="submit" value="Get Shipment Details" onclick="javascript:return ValidateEmail()">
                         </div>
@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="table-content">
-                    <table>
+                    <table class="styled-table">
                         <thead>
                             <tr>
                                 <th>Shipment Number</th>
@@ -117,6 +117,12 @@
 </body>
 
 <script>
+    let btn = document.querySelector('#btn');
+    let sidebar = document.querySelector('.sidebar');
+
+    btn.onclick = function() {
+        sidebar.classList.toggle('active');
+    };
 
     function printError(elemId, hintMsg) {
     document.getElementById(elemId).innerHTML = hintMsg;
