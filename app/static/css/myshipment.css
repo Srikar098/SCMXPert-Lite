@@ -211,7 +211,7 @@ body {
 
 .styled-table {
     border-collapse: collapse;
-    margin: 25px 0;
+    margin: 15px 0;
     font-size: 0.9em;
     font-family: sans-serif;
     min-width: 400px;
@@ -371,4 +371,40 @@ table tbody tr:nth-child(even){
     color: #fff;
     background-color: #4070f4;
 
+}
+
+.pagination {
+    display: flex;
+    margin-top: 15px;
+    width: fit-content;
+    float: right;
+}
+.pagination a.active {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #4CAF50;
+}
+  
+.pagination a:hover:not(.active) {
+    background-color: #ddd;
+}
+
+.pagination ul{
+    display: flex;
+    margin: 10px;
+    width: fit-content;
+    border: 0.5px solid #D9D9DA;
+    border-radius: 4px;
+}
+
+.pagination ul li {
+    list-style-type: none;
+    padding: 5px 15px;
+    text-align: center;
+    border: 0.5px solid #D9D9DA;
+}
+
+.pagination ul li a{
+    text-decoration: none;
+    color: #0077FC;
 }

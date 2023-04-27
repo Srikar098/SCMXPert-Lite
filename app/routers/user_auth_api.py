@@ -10,7 +10,9 @@ from datetime import datetime, timedelta
 from pymongo.errors import PyMongoError
 from dotenv import load_dotenv
 from configuration.configuration import SETTING
+from fastapi.exceptions import HTTPException
 
+# Load environment variables from the .env file
 load_dotenv()
 
 app = APIRouter()
@@ -19,19 +21,15 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 TEMPLATES = Jinja2Templates(directory="templates")
 
+# Connect to MongoDB
 CLIENT = SETTING.CLIENT
 USERS_COLLECTION = SETTING.USERS_COLLECTION
-
 
 
 # Get Request for Login 
 @app.get("/login", response_class=HTMLResponse)
 async def login(request: Request):
     return TEMPLATES.TemplateResponse("login.html", {"request": request})
-
-# @app.get("/signup", response_class=HTMLResponse)
-# async def signup(request: Request):
-#     return TEMPLATES.TemplateResponse("login.html", {"request": request})
 
 
 #Post Request for User SignUp
@@ -48,8 +46,6 @@ def user_signup(request: Request, Full_Name: str = Form(...), Email: str = Form(
         return TEMPLATES.TemplateResponse("login.html", {"request":request, "message":"Email already exists"})
     except KeyError as exc:
         raise HTTPException(status_code=400, detail=f"Missing parameter: {exc}") from exc
-    except PyMongoError as exc:
-        raise HTTPException(status_code=500, detail="Database error. Please try again later.") from exc
     except Exception as exc:
         raise HTTPException(status_code=500, detail="Internal Server Error") from exc
 
@@ -102,7 +98,7 @@ async def login_user(request: Request, form_data: OAuth2PasswordRequestForm = De
         response.set_cookie(key=SETTING.COOKIE_NAME, value=access_token, httponly=True)
         return response
     except KeyError as exc:
-        raise HTTPException(status_code=400, detail=f"Missing parameter: {exc}") from exc
+        raise HTTPException(status_code=400, detail=f"Missing parameter: {exc}")
     except Exception as exc:
         raise HTTPException(status_code=500, detail="Internal Server Error") from exc
             
@@ -147,7 +143,6 @@ def get_user_from_token(token: str = Depends(oauth2_scheme)) -> User:
 
 def get_current_user_from_cookie(request: Request) -> User:
     token = request.cookies.get(SETTING.COOKIE_NAME)
-    # print(token)
     user = get_user_from_token(token)
     return user
 
@@ -171,39 +166,46 @@ def dashboard_links(current_user_role):
 
 #Get Request for Dashboard
 @app.get("/dashboard", response_class=HTMLResponse)
-async def dashboard(request: Request, current_user: User = Depends(get_current_user_from_cookie)):
-    if current_user is None:
-        return RedirectResponse(url="/login")
-    
-    links = navigation_links(current_user["Role"])
-    d_links = dashboard_links(current_user["Role"])
-    context = {
-        "user": current_user,
-        "request": request,
-        "links": links,
-        "d_links": d_links
-    }
-    return TEMPLATES.TemplateResponse("dashboard.html", context)
+async def dashboard(request: Request, current_user: dict = Depends(get_current_user_from_cookie)):
+    try:
+        if current_user is None:
+            return RedirectResponse(url="/login")
+        
+        links = navigation_links(current_user["Role"])
+        d_links = dashboard_links(current_user["Role"])
+        context = {
+            "user": current_user,
+            "request": request,
+            "links": links,
+            "d_links": d_links
+        }
+        return TEMPLATES.TemplateResponse("dashboard.html", context)
+    except Exception as exception:
+        raise HTTPException(status_code=500, detail=str(exception)) from exception
 
 
 #Get Request for My Account
 @app.get("/myAccount", response_class=HTMLResponse)
 async def my_account(request: Request, current_user: dict = Depends(get_current_user_from_cookie)):
-    if current_user is None:
-        return RedirectResponse(url="/login")
+    try:
+        if current_user is None:
+            # raise HTTPException(status_code=401, detail="You must be logged in to access this page.")
+            return RedirectResponse(url="/login")
+        
+        links = navigation_links(current_user["Role"])
+        # user = get_current_user_from_cookie(request)   
+        data = USERS_COLLECTION.find_one({"Email":current_user["Email"]})
+        if data: 
+            context = {
+                "user": current_user,
+                "request": request,
+                "data":data,
+                "links":links
+            }
+            return TEMPLATES.TemplateResponse("myaccount.html", context)
+    except Exception as exception:
+        raise HTTPException(status_code=500, detail=str(exception)) from exception
     
-    links = navigation_links(current_user["Role"])
-    # user = get_current_user_from_cookie(request)   
-    data = USERS_COLLECTION.find_one({"Email":current_user["Email"]})
-    if data: 
-        context = {
-            "user": current_user,
-            "request": request,
-            "data":data,
-            "links":links
-        }
-        return TEMPLATES.TemplateResponse("myaccount.html", context)
-
 #Function for logout
 @app.get("/logout", response_class=HTMLResponse)
 def logout_get(response: Response):
@@ -228,26 +230,14 @@ async def forgot_password(request: Request):
 def forgot_password_auth(request: Request, Email: str = Form(...), Password: str = Form(...), cPassword: str = Form(...)):
     hashed_password = hash_password(Password)
     data = USERS_COLLECTION.find_one({"Email":Email})
-    if not data:
-        return TEMPLATES.TemplateResponse("forgotpassword.html", {"request":request, "message":"Invalid Email Address"})
-    else:
-        old_password = data["Password"]
-        if verify_password(Password, old_password):
-            return TEMPLATES.TemplateResponse("forgotpassword.html",{"request": request, 'message': 'Old password cannot be a new password.'})
-        USERS_COLLECTION.update_one({"Email":Email},{"$set": {"Password": hashed_password}})
-        return TEMPLATES.TemplateResponse("forgotpassword.html", {"request":request, "message":"Successfully Reset Password"})
-
-# @app.get("/device_data_stream", response_class=HTMLResponse)
-# async def device_data(request: Request,current_user: User = Depends(get_current_user_from_cookie)):
-#     if current_user is None:
-#         return RedirectResponse(url="/login")
-    
-#     links = navigation_links(current_user["Role"])
-#     d_links = dashboard_links(current_user["Role"])
-#     context = {
-#         "user": current_user,
-#         "request": request,
-#         "links": links,
-#         "d_links": d_links
-#     }
-#     return TEMPLATES.TemplateResponse("devicedata.html", context)
+    try:
+        if not data:
+            return TEMPLATES.TemplateResponse("forgotpassword.html", {"request":request, "message":"Invalid Email Address"})
+        else:
+            old_password = data["Password"]
+            if verify_password(Password, old_password):
+                return TEMPLATES.TemplateResponse("forgotpassword.html",{"request": request, 'message': 'Old password cannot be a new password.'})
+            USERS_COLLECTION.update_one({"Email":Email},{"$set": {"Password": hashed_password}})
+            return TEMPLATES.TemplateResponse("forgotpassword.html", {"request":request, "message":"Successfully Reset Password"})
+    except Exception as exception:
+        raise HTTPException(status_code=500, detail=str(exception)) from exception

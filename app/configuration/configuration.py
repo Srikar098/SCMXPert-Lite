@@ -2,8 +2,10 @@ import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
+# Load environment variables from the .env file
 load_dotenv(dotenv_path=".env")
 
+# Read environment variables
 class Settings:
     TITLE: str = "SCMXpertLite"
     DESCRIPTION: str = """SCMXpertLite Developed in FastAPI"""

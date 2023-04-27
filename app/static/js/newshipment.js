@@ -149,7 +149,7 @@ function validateShipment() {
     if(description == ""){
         printError("descriptionErr","* Please enter shipment description");
     } else {
-        var regex = /^[a-zA-Z0-9.,_]+$/;
+        var regex = /^[a-zA-Z0-9.,_\s]+$/;
         if(regex.test(description) === false){
             printError("descriptionErr","* Please enter a valid description");
         } else {
@@ -165,3 +165,4 @@ function validateShipment() {
         document.getElementById("shipmentForm").submit();
     }
 };
+
