@@ -117,6 +117,7 @@ def create_access_token(data: dict, expires_delta: timedelta = None ):
 
 #Function to decode the JWT Token
 def decode_access_token(token: str):
+    
     try:
         payload = jwt.decode(token, SETTING.SECRET_KEY, algorithms=[SETTING.ALGORITHM])
         return payload
@@ -167,10 +168,12 @@ def dashboard_links(current_user_role):
 #Get Request for Dashboard
 @app.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request, current_user: dict = Depends(get_current_user_from_cookie)):
-    try:
-        if current_user is None:
-            return RedirectResponse(url="/login")
-        
+    
+    if current_user is None:
+        # raise HTTPException(status_code=401, detail="You must be logged in to access this page.")
+        return RedirectResponse(url="/login")
+    
+    try:   
         links = navigation_links(current_user["Role"])
         d_links = dashboard_links(current_user["Role"])
         context = {

@@ -45,25 +45,25 @@ function createPaginationLinks() {
     paginationLinks.querySelector('ul').appendChild(document.createElement('li')).appendChild(link);
   }
 
-  // add event listeners to the "Previous" and "Next" links #prev-page-link
-  const prevLink = document.getElementById("prev-page-link");
-  const nextLink = document.getElementById("next-page-link");
-  prevLink.addEventListener('click', () => {
-    const activeLink = paginationLinks.querySelector('.active');
-    if (activeLink.previousElementSibling) {
-      const pageNumber = parseInt(activeLink.previousElementSibling.dataset.pageNumber);
-      displayPage(pageNumber);
-      setActiveLink(activeLink.previousElementSibling);
-    }
-  });
-  nextLink.addEventListener('click', () => {
-    const activeLink = paginationLinks.querySelector('.active');
-    if (activeLink.nextElementSibling) {
-      const pageNumber = parseInt(activeLink.nextElementSibling.dataset.pageNumber);
-      displayPage(pageNumber);
-      setActiveLink(activeLink.nextElementSibling);
-    }
-  });
+  // // add event listeners to the "Previous" and "Next" links #prev-page-link
+  // const prevLink = document.getElementById("prev-page-link");
+  // const nextLink = document.getElementById("next-page-link");
+  // prevLink.addEventListener('click', () => {
+  //   const activeLink = paginationLinks.querySelector('.active');
+  //   if (activeLink.previousElementSibling) {
+  //     const pageNumber = parseInt(activeLink.previousElementSibling.dataset.pageNumber);
+  //     displayPage(pageNumber);
+  //     setActiveLink(activeLink.previousElementSibling);
+  //   }
+  // });
+  // nextLink.addEventListener('click', () => {
+  //   const activeLink = paginationLinks.querySelector('.active');
+  //   if (activeLink.nextElementSibling) {
+  //     const pageNumber = parseInt(activeLink.nextElementSibling.dataset.pageNumber);
+  //     displayPage(pageNumber);
+  //     setActiveLink(activeLink.nextElementSibling);
+  //   }
+  // });
 
   // set the first link as active by default
   setActiveLink(paginationLinks.querySelector('.page-link'));
