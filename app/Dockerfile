@@ -1,13 +1,15 @@
 FROM python:3.9.7
 
-COPY . /SCMXPertLite/app/main.py
+WORKDIR /app
 
-COPY . /SCMXPertLite/app/requirements.txt
+# COPY . /SCMXPertLite/app/requirements.txt
 
-WORKDIR /SCMXPertLite/app/main.py
+COPY ./requirements.txt /app/requirements.txt
 
-RUN apt-get update && apt-get install -y python3-pip && pip3 install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 8000
+COPY . /app
 
-CMD [ "uvicorn", "main:app", "--reload", "--host=0.0.0.0", "--port=8000"]
+EXPOSE 8085
+
+CMD ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "8085"]
