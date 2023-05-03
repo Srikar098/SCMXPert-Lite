@@ -3,8 +3,42 @@ version: '3'
 services:
 
   app:
-
-    image: myapp
+    image: srikar098/scmxpertlite_app:latest
     ports:
-      -8085:8085
-    
+      - 8085:8085
+
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    ports:
+      - "2181:2181"
+    depends_on:
+      - app   
+    environment:  
+      - ALLOW_ANONYMOUS_LOGIN=yes 
+
+  kafka:
+    image: 'bitnami/kafka:latest'
+    ports:  
+      - "9092:9092"
+    depends_on:
+      - zookeeper    
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181   
+      - ALLOW_PLAINTEXT_LISTENER=yes
+
+  server:
+    image: srikar098/scmxpertlite_server:latest
+    ports:
+      - "5050:5050"
+    depends_on:
+      - kafka 
+
+  producer:
+    image: srikar098/scmxpertlite_producer:latest
+    depends_on:
+      - server
+
+  consumer:
+    image: srikar098/scmxpertlite_consumer:latest
+    depends_on:
+      - producer

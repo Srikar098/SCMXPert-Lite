@@ -3,10 +3,11 @@ import errno
 import json
 import time
 import random
-
+import pytz
+from datetime import datetime
 
 # Port number and address to bind the server socket
-PORT = 8080
+PORT = 5050
 ADDR = ("", PORT)
 FORMAT = 'utf-8'
 
@@ -18,6 +19,8 @@ print("SOCKET CREATED")
 SOCKET_CONNECTION.bind(ADDR)
 SOCKET_CONNECTION.listen(2)
 
+# Set the timezone to 'Asia/Kolkata'
+IST = pytz.timezone('Asia/Kolkata')
 
 try:
     # Accept the connection from the client
@@ -43,7 +46,7 @@ try:
                         "First_Sensor_Temperature":round(random.uniform(10,40.0),1),
                         "Route_From":routefrom,
                         "Route_To":routeto,
-                        "Timestamp": time.strftime('%Y-%m-%d %H:%M:%S')
+                        "Timestamp": datetime.now(IST).strftime('%Y-%m-%d %H:%M:%S')
                         }
                     # Encode the data as a JSON object and send it to the client
                     userdata = (json.dumps(data)+"\n").encode(FORMAT)

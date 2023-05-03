@@ -19,7 +19,7 @@ BOOTSTRAP_SERVERS = os.getenv("bootstrap_servers")
 
 try:
     # KafkaConsumer object
-    CONSUMER = KafkaConsumer(TOPIC_NAME, bootstrap_servers=BOOTSTRAP_SERVERS, auto_offset_reset='latest')
+    CONSUMER = KafkaConsumer(TOPIC_NAME, bootstrap_servers=BOOTSTRAP_SERVERS, api_version=(0,11,5), auto_offset_reset='latest')
     
     # Looping through the data received from Kafka topic
     for DATA in CONSUMER:
@@ -33,10 +33,6 @@ try:
             print(DATA)
         except json.decoder.JSONDecodeError:
             continue
+
 except KeyboardInterrupt:
     sys.exit()
-
-# Closing the kafka consumer
-finally:
-    CONSUMER.close()
-    print("Consumer Closed")

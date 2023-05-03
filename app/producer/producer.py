@@ -22,7 +22,7 @@ try:
     print("Socket connected successfully!")
 
     # KafkaProducer object
-    PRODUCER = KafkaProducer(bootstrap_servers=BOOTSTRAP_SERVERS, retries=5)
+    PRODUCER = KafkaProducer(bootstrap_servers=BOOTSTRAP_SERVERS,api_version=(0,11,5), retries=5)
 
     # Looping to read data from the socket connection and send it to the Kafka topic
     while True:
