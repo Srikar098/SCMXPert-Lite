@@ -5,11 +5,12 @@ const paginationLinks = document.querySelector('.pagination');
 // create an array of all rows in the table body
 const tableRows = Array.from(tableBody.querySelectorAll('tr'));
 
-// calculate the total number of pages
+// // calculate the total number of pages
 const totalPages = Math.ceil(tableRows.length / rowsPerPage);
 
 // display the first page and create pagination links
-displayPage(1);
+let currentPage = 1;
+displayPage(currentPage);
 createPaginationLinks();
 
 function displayPage(pageNumber) {
@@ -20,10 +21,17 @@ function displayPage(pageNumber) {
   // hide all rows in the table body
   tableRows.forEach(row => row.style.display = 'none');
 
+  // update current page
+  currentPage = pageNumber;
+
   // display the rows for the given page
   for (let i = startIndex; i < endIndex && i < tableRows.length; i++) {
     tableRows[i].style.display = 'table-row';
   }
+
+  // update the page numbers text
+  const pageNumbers = document.querySelector('#pageText');
+  pageNumbers.textContent = `Showing ${currentPage} of ${totalPages}`;
 }
 
 function createPaginationLinks() {
@@ -39,40 +47,23 @@ function createPaginationLinks() {
     link.addEventListener('click', () => {
       const pageNumber = parseInt(link.dataset.pageNumber);
       displayPage(pageNumber);
-      setActiveLink(link);
     });
 
     paginationLinks.querySelector('ul').appendChild(document.createElement('li')).appendChild(link);
   }
 
-  // add event listeners to the "Previous" and "Next" links #prev-page-link
-  const prevLink = document.getElementById("prev-page-link");
-  const nextLink = document.getElementById("next-page-link");
-  prevLink.addEventListener('click', () => {
-    const activeLink = paginationLinks.querySelector('.active');
-    if (activeLink.previousElementSibling) {
-      const pageNumber = parseInt(activeLink.previousElementSibling.dataset.pageNumber);
-      displayPage(pageNumber);
-      setActiveLink(activeLink.previousElementSibling);
-    }
-  });
-  nextLink.addEventListener('click', () => {
-    const activeLink = paginationLinks.querySelector('.active');
-    if (activeLink.nextElementSibling) {
-      const pageNumber = parseInt(activeLink.nextElementSibling.dataset.pageNumber);
-      displayPage(pageNumber);
-      setActiveLink(activeLink.nextElementSibling);
-    }
-  });
-
-  // set the first link as active by default
-  setActiveLink(paginationLinks.querySelector('.page-link'));
 }
 
-function setActiveLink(link) {
-  // remove the "active" class from all links
-  paginationLinks.querySelectorAll('a').forEach(a => a.classList.remove('active'));
-
-  // add the "active" class to the given link
-  link.classList.add('active');
+function prevPage() {
+  if (currentPage > 1) {
+    displayPage(currentPage - 1);
+  }
 }
+
+function nextPage() {
+  if (currentPage < totalPages) {
+    displayPage(currentPage + 1);
+  }
+}
+
+

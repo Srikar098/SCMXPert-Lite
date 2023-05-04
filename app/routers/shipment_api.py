@@ -29,7 +29,7 @@ SHIPMENT_COLLECTION = SETTING.SHIPMENT_COLLECTION
 async def admin_my_shipments(request: Request, current_user: User = Depends(get_current_user_from_cookie)):
     # user = get_current_user_from_cookie(request)
     if current_user["Role"] !="Admin":
-            raise HTTPException(status_code=401, detail="Unauthorized")
+        raise HTTPException(status_code=401, detail="Unauthorized")
     
     try:
         if current_user is None:
@@ -54,7 +54,7 @@ async def admin_my_shipments(request: Request, current_user: User = Depends(get_
 @app.post("/admin/myShipment/email")
 def find_shipments_by_email(request: Request, Email: str = Form(...), Device: str = Form(...), current_user: dict = Depends(get_current_user_from_cookie) ):
     if current_user["Role"] !="Admin":
-            raise HTTPException(status_code=401, detail="Unauthorized")
+        raise HTTPException(status_code=401, detail="Unauthorized")
                 
     try:
         if current_user is None:
