@@ -7,7 +7,6 @@ WORKDIR /app/consumer
 COPY . /app/consumer
 
 # Install required packages
-RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install python-dotenv kafka-python pymongo
 
 # Run the consumer

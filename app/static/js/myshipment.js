@@ -1,4 +1,4 @@
-const rowsPerPage = 10; // number of rows per page
+const rowsPerPage = 5; // number of rows per page
 const tableBody = document.querySelector('tbody');
 const paginationLinks = document.querySelector('.pagination');
 

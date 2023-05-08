@@ -31,18 +31,13 @@ async def data_stream(request: Request,current_user: User = Depends(get_current_
         raise HTTPException(status_code=401, detail="Unauthorized")
     
     links = navigation_links(current_user["Role"])
-    # d_links = dashboard_links(current_user["Role"])
     try:
-        data_streaming = []
         device_details = DEVICE_DATA.find({})
-        for i in device_details:
-            data_streaming.append(i)
         context = {
             "user": current_user,
             "request": request,
             "links": links,
-            "data_streaming":data_streaming
-            # "d_links": d_links
+            "data_streaming": device_details
         }
         return TEMPLATES.TemplateResponse("devicedata.html", context)
     except Exception as e:
