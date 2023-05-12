@@ -19,6 +19,7 @@ Why use Python?
 Python is relatively easy language to learn, has a large and active community of developers. And, Python has a wide range of libraries and tools available for API development.
 
 What is API?
+
 An API, or application programming interface, is a set of rules that define how two applications can communicate with each other.
 
 An API request is a message sent to an API server asking it to perform an action. The request includes the URL of the API endpoint and an HTTP request method. The method indicates the action you want the API to perform.
