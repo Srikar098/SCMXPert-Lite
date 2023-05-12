@@ -15,6 +15,7 @@ Technologies used to develop the application:
 5) Cloud            -        AWS 
 
 Why use Python?
+
 Python is relatively easy language to learn, has a large and active community of developers. And, Python has a wide range of libraries and tools available for API development.
 
 What is API?
