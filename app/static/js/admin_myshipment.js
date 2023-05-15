@@ -32,7 +32,7 @@ function displayPage(pageNumber) {
   // update the page numbers text
   const pageNumbers = document.querySelector('#pageText');
   pageNumbers.textContent = `Showing ${currentPage} of ${totalPages}`;
-}
+};
 
 function createPaginationLinks() {
   // create a link for each page and add it to the pagination container
@@ -52,18 +52,18 @@ function createPaginationLinks() {
     paginationLinks.querySelector('ul').appendChild(document.createElement('li')).appendChild(link);
   }
 
-}
+};
 
 function prevPage() {
   if (currentPage > 1) {
     displayPage(currentPage - 1);
   }
-}
+};
 
 function nextPage() {
   if (currentPage < totalPages) {
     displayPage(currentPage + 1);
   }
-}
+};
 
 

@@ -13,6 +13,11 @@ from configuration.configuration import SETTING
 from fastapi.exceptions import HTTPException
 
 # Load environment variables from the .env file
+# from fastapi_mail import FastMail, MessageSchema,ConnectionConfig, MessageType
+from email.mime.text import MIMEText
+import random
+import smtplib
+
 load_dotenv()
 
 app = APIRouter()
@@ -222,25 +227,111 @@ def logout_get(response: Response):
         raise HTTPException(status_code=500, detail=str(exception)) from exception
 
 
+
+# #Post Request for Forgot Password
+# @app.post("/forgot_password",response_class=HTMLResponse)
+# def forgot_password_auth(request: Request, Email: str = Form(...), Password: str = Form(...), cPassword: str = Form(...)):
+#     hashed_password = hash_password(Password)
+#     data = USERS_COLLECTION.find_one({"Email":Email})
+#     try:
+#         if not data:
+#             return TEMPLATES.TemplateResponse("forgotpassword.html", {"request":request, "message":"Invalid Email Address"})
+#         else:
+#             old_password = data["Password"]
+#             if verify_password(Password, old_password):
+#                 return TEMPLATES.TemplateResponse("forgotpassword.html",{"request": request, 'message': 'Old password cannot be a new password.'})
+#             USERS_COLLECTION.update_one({"Email":Email},{"$set": {"Password": hashed_password}})
+#             return TEMPLATES.TemplateResponse("forgotpassword.html", {"request":request, "message":"Successfully Reset Password"})
+#     except Exception as exception:
+#         raise HTTPException(status_code=500, detail=str(exception)) from exception
+    
+
+# Forgot Password Part
+
+user_data = {}
+
 #Get Request for Forgot Password
 @app.get("/forgot_password", response_class=HTMLResponse)
 async def forgot_password(request: Request):
     return TEMPLATES.TemplateResponse("forgotpassword.html",{"request": request})
 
+def generate_otp():
+    # Generate a random 6-digit OTP
+    otp = random.randint(100000, 999999)
+    return otp
 
-#Post Request for Forgot Password
-@app.post("/forgot_password",response_class=HTMLResponse)
-def forgot_password_auth(request: Request, Email: str = Form(...), Password: str = Form(...), cPassword: str = Form(...)):
-    hashed_password = hash_password(Password)
+def send_email(email, otp):
+    sender_email = 'scmxpert.official@outlook.com'
+    password = 'SCMXpertLite@123'
+    subject = 'Password Reset OTP'
+    message = f"Your OTP is {otp}. It will expire in 15 minutes."
+    msg = MIMEText(message)
+    msg['Subject'] = subject
+    msg['From'] = sender_email
+    msg['To'] = email
+    with smtplib.SMTP('smtp.office365.com', 587) as smtp:
+        smtp.starttls()
+        smtp.login(sender_email, password)
+        smtp.send_message(msg)
+
+@app.post("/forgot_password")
+def forgot_password_post(request: Request, Email: str = Form(...)):
+    global user_data
+
     data = USERS_COLLECTION.find_one({"Email":Email})
-    try:
-        if not data:
-            return TEMPLATES.TemplateResponse("forgotpassword.html", {"request":request, "message":"Invalid Email Address"})
+
+    if data:
+        # Generate OTP
+        otp = random.randint(100000, 999999)
+
+        # Store user email and OTP in dictionary
+        user_data["email"] = Email
+        user_data["otp"] = otp
+        user_data["otp_expiry"] = datetime.now() + timedelta(minutes=15)
+
+        try:
+            send_email(Email, otp)
+            return TEMPLATES.TemplateResponse("otpform.html", {"request": request, "message": "OTP has been sent to your email."})
+        except Exception as e:
+            return TEMPLATES.TemplateResponse("forgotpassword.html", {"request": request, "message": "Failed to send OTP. Please try again later."})
+    else:
+        return TEMPLATES.TemplateResponse("forgotpassword.html",{"request":request, "message":"Email Not Found"})
+
+
+def verify_otp(otp: int):
+    global user_data
+    if "email" in user_data and "otp" in user_data:
+        if otp == user_data["otp"]:
+            return True
+    return False
+
+@app.post("/verify_otp")
+async def verify_otp_post(request: Request, otp: int = Form(...)):
+    if verify_otp(otp):
+        return TEMPLATES.TemplateResponse("resetpassword.html",{"request":request, "message":"OTP verification successful."})
+    else:
+        return TEMPLATES.TemplateResponse("otpform.html",{"request":request, "message":"Invalid OTP."})
+    
+@app.post("/reset_password")
+async def reset_password_post(request: Request, Password: str = Form(...), cPassword: str = Form(...)):
+    global user_data
+
+    if "email" in user_data and "otp_expiry" in user_data:
+        if datetime.now() <= user_data["otp_expiry"]:
+            if Password == cPassword:
+                hashed_password = hash_password(Password)
+                USERS_COLLECTION.update_one({"Email": user_data["email"]}, {"$set": {"Password": hashed_password}})
+
+                # Clear user data from dictionary
+                del user_data["email"]
+                del user_data["otp"]
+                del user_data["otp_expiry"]
+
+                # Return success message
+                return TEMPLATES.TemplateResponse("login.html", {"request": request, "message": "Password Reset Successfully."})
+            else:
+                return TEMPLATES.TemplateResponse("resetpassword.html", {"request": request, "message": "Passwords do not match."})
         else:
-            old_password = data["Password"]
-            if verify_password(Password, old_password):
-                return TEMPLATES.TemplateResponse("forgotpassword.html",{"request": request, 'message': 'Old password cannot be a new password.'})
-            USERS_COLLECTION.update_one({"Email":Email},{"$set": {"Password": hashed_password}})
-            return TEMPLATES.TemplateResponse("forgotpassword.html", {"request":request, "message":"Successfully Reset Password"})
-    except Exception as exception:
-        raise HTTPException(status_code=500, detail=str(exception)) from exception
+            return TEMPLATES.TemplateResponse("resetpassword.html", {"request": request, "message": "OTP has expired."})
+    else:
+        return TEMPLATES.TemplateResponse("resetpassword.html", {"request": request, "message": "Invalid Credentials."})

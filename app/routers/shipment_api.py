@@ -27,14 +27,13 @@ SHIPMENT_COLLECTION = SETTING.SHIPMENT_COLLECTION
 # Requests when admin is logged
 @app.get("/admin/myShipment", response_class=HTMLResponse)
 async def admin_my_shipments(request: Request, current_user: User = Depends(get_current_user_from_cookie)):
-    # user = get_current_user_from_cookie(request)
+    if current_user is None:
+        return RedirectResponse(url="/login")
+
     if current_user["Role"] !="Admin":
         raise HTTPException(status_code=401, detail="Unauthorized")
     
-    try:
-        if current_user is None:
-            return RedirectResponse(url="/login")
-        
+    try:        
         links = navigation_links(current_user["Role"])
         data = SHIPMENT_COLLECTION.find()
     
@@ -46,32 +45,39 @@ async def admin_my_shipments(request: Request, current_user: User = Depends(get_
                 "links": links
             }
             return TEMPLATES.TemplateResponse("myShipment_Admin.html", context)
-        raise HTTPException(status_code=404, detail="No data found")
+        # raise HTTPException(status_code=404, detail="No data found")
     except Exception as exc:
         raise HTTPException(status_code=500, detail="Internal Server Error") from exc
 
 #Post Request to find shipment details by email and device id
 @app.post("/admin/myShipment/email")
 def find_shipments_by_email(request: Request, Email: str = Form(...), Device: str = Form(...), current_user: dict = Depends(get_current_user_from_cookie) ):
+    if current_user is None:
+        return RedirectResponse(url="/login")
+        
     if current_user["Role"] !="Admin":
         raise HTTPException(status_code=401, detail="Unauthorized")
                 
     try:
-        if current_user is None:
-            return RedirectResponse(url="/login")
-            
         links = navigation_links(current_user["Role"])
         data = SHIPMENT_COLLECTION.find({"Email_Id":Email,"Device":Device})
-    
-        if data:
+        data_list = [item for item in data]
+        if not data_list:
             context = {
                 "user": current_user,
                 "request": request,
-                "data": data,
-                "links": links
+                "links": links,
+                "message":"No Data Found"
             }
             return TEMPLATES.TemplateResponse("myShipment_Admin.html", context)
-        # raise HTTPException(status_code=404, detail="No data found")
+        else:
+            context = {
+                "user": current_user,
+                "request": request,
+                "links": links,
+                "data": data_list
+            }
+            return TEMPLATES.TemplateResponse("myShipment_Admin.html", context)
     except ValueError as exc:
         raise HTTPException(status_code=422, detail="Invalid input. Please check your input values.") from exc
     except Exception as exc:
@@ -82,14 +88,13 @@ def find_shipments_by_email(request: Request, Email: str = Form(...), Device: st
 @app.get("/myShipment", response_class=HTMLResponse)
 async def my_shipments(request: Request, current_user: dict = Depends(get_current_user_from_cookie) ):
     # user = get_current_user_from_cookie(request)
+    if current_user is None:
+        return RedirectResponse(url="/login")
     
     if current_user["Role"] !="User":
         raise HTTPException(status_code=401, detail="Unauthorized")
          
-    try:
-        if current_user is None:
-            return RedirectResponse(url="/login")
-           
+    try:         
         links = navigation_links(current_user["Role"])
         data = SHIPMENT_COLLECTION.find({"Email_Id":current_user["Email"]})
     

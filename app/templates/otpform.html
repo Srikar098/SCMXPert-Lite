@@ -32,24 +32,21 @@
               </div> 
             <div class="content">
                 <div class="title">Forgot Password?</div>
-                <div class="forgot-password-form">
-                    <div class="forgot-password-form">
-                        <form action="/forgot_password" method="post" name="forgotPasswordForm" id="forgot-password-form">
-                            <div class="input-fields">
-                                <div class="input-field">
-                                    <label>Enter your Email Address<span>*</span></label>
-                                    <input type="text" placeholder="Enter your email address" name="Email" id="Email">
-                                </div>
-                                <div class="error" id="emailErr">
-                                </div>
-                                    
-                                <div class="button input-field">
-                                    <input type="submit" value="Generate OTP" onclick="javascript:return validateEmail()">
-                                </div>
+                <div class="otp-form">
+                    <form action="/verify_otp" method="post" name="otpForm" id="otp-form">
+                        <div class="input-fields">
+                            <div class="input-field">
+                                <label>Enter OTP<span>*</span></label>
+                                <input type="number" placeholder="Enter your OTP" name="otp" id="otp">
                             </div>
-                        </form>
-                    </div>
-
+                            <div class="error" id="otpErr">
+                            </div>
+                                
+                            <div class="button input-field">
+                                <input type="submit" value="Verify OTP" onclick="javascript:return validateOTP()">
+                            </div>
+                        </div>
+                    </form>
                 </div>
 
 

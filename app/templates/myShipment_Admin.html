@@ -41,11 +41,7 @@
         </div>
 
         <div class="body"> 
-            <div class="message">
-                {% for message in message %}
-                    {{message}}
-                {% endfor %}
-            </div>
+            
             <div class="content">
                 <div class="title">Shipment Details</div>
                 
@@ -58,7 +54,13 @@
                         </div>
                         <div class="input-field">
                             <label>Device ID<span>*</span></label>
-                            <input type="number" placeholder="Enter device id" name="Device" id="Device">  
+                            <select id="Device" name="Device">
+                                <option value="select">Select Device</option>
+                                <option value="517501">517501</option>
+                                <option value="530068">530068</option>
+                                <option value="560003">560003</option>
+                                <option value="515253">515253</option>
+                            </select>  
                         </div>
                         
                         <div class="button input-field">
@@ -70,7 +72,11 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="message">
+                    {% for message in message %}
+                        {{message}}
+                    {% endfor %}
+                </div>
                 <div class="table-content">
                     <table class="styled-table">
                         <thead>
@@ -146,11 +152,11 @@
         var device = document.findByEmailForm.Device.value
         var emailErr = true;
         
-        if(!email && !device){
+        if(!email && (device == "select")){
             printError("emailErr", "* Please enter email address and device id");
         } else if(!email){
             printError("emailErr", "* Please enter email address");
-        } else if(!device){
+        } else if(device == "" || device == "select"){
             printError("emailErr", "* Please enter device id");
         } else {
             // Regular expression for basic email validation

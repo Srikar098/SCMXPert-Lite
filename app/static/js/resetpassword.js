@@ -37,12 +37,8 @@ const resetPasswordForm = document.getElementById("reset-password-form");
 
 function validateEmail(){
     var email = document.forgotPasswordForm.Email.value;
-    var password = document.forgotPasswordForm.Password.value;
-    var cPassword = document.forgotPasswordForm.cPassword.value;
 
     var emailErr = true;
-    var passwordErr = true;
-    var cPasswordErr = true;
 
     if(email == ""){
         printError("emailErr", "* Please enter your email address");
@@ -58,6 +54,41 @@ function validateEmail(){
         }
     }
 
+    if(emailErr == true){
+        return false;
+    } else {
+        document.getElementById("forgotPasswordForm").submit();
+    }
+
+};
+
+function validateOTP(){
+    var otp = document.otpForm.otp.value;
+    var otpErr = true;
+
+    if(!otp){
+        printError("otpErr", "* Please enter your OTP");
+    } else if(otp.length < 6 || otp.length > 6 ){
+        printError("otpErr", "* Please enter valid OTP");
+    } else {
+        printError("otpErr", "");
+        otpErr = false;
+    }
+
+    if(otpErr == true){
+        return false;
+    } else {
+        document.getElementById("otpForm").submit();
+    }
+
+};
+
+function validatePassword(){
+    var password = document.resetPasswordForm.Password.value;
+    var cPassword = document.resetPasswordForm.cPassword.value;
+
+    var passwordErr = true;
+    var cPasswordErr = true;
 
     if(password == ""){
         printError("passwordErr", "* Please enter your password");
@@ -80,68 +111,11 @@ function validateEmail(){
         cPasswordErr = false;
     }
 
-    if((emailErr || passwordErr || cPasswordErr) == true){
+    if((passwordErr || cPasswordErr) == true ){
         return false;
-    } else {
-        document.getElementById("forgotPasswordForm").submit();
     }
-
+    else {
+        document.getElementById("resetPasswordForm").submit();
+    }
 };
-
-// function validateOTP(){
-//     var otp = document.otpForm.otp.value;
-//     var otpErr = true;
-
-//     if(!otp){
-//         printError("otpErr", "* Please enter your OTP");
-//     } else if(otp.length < 6 || otp.length > 6 ){
-//         printError("otpErr", "* Please enter valid OTP");
-//     } else {
-//         printError("otpErr", "");
-//         otpErr = false;
-//     }
-
-//     if(otpErr == true){
-//         return false;
-//     } else {
-//         document.getElementById("otpForm").submit();
-//     }
-
-// };
-
-// function validatePassword(){
-//     var password = document.resetPasswordForm.Password.value;
-//     var cPassword = document.resetPasswordForm.cPassword.value;
-
-//     var passwordErr = true;
-//     var cPasswordErr = true;
-
-//     if(password == ""){
-//         printError("passwordErr", "* Please enter your password");
-//     } else if(password.length < 8) {
-//         printError("passwordErr", "* Password length must be at least 8 characters");
-//     } else if(password.length > 16) {
-//         printError("passwordErr", "* Password length must not exceed 16 characters");
-//     } else { 
-//         printError("passwordErr", "");
-//         passwordErr = false;
-//     }
-
-//     //Validate confirm password
-//     if(cPassword == ""){
-//         printError("cPasswordErr", "* Please enter your password");
-//     }else if(cPassword != password){
-//         printError("cPasswordErr", "* Password doesn't match")
-//     } else{
-//         printError("cPasswordErr", "");
-//         cPasswordErr = false;
-//     }
-
-//     if((passwordErr || cPasswordErr) == true ){
-//         return false;
-//     }
-//     else {
-//         document.getElementById("resetPasswordForm").submit();
-//     }
-// };
 
